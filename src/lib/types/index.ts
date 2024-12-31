@@ -103,7 +103,7 @@ export type InsightWithUser = Prisma.InsightGetPayload<{
 
 export type AuthResponse = ApiResponse<{
   user: UserResponse;
-  token: string;
+  token?: string;
 }>;
 
 export type RegisterResponse = AuthResponse;
