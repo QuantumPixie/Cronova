@@ -1,34 +1,21 @@
 import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcrypt';
-import { validateEmail, validatePassword } from '@/lib/utils/validation';
+import { registerSchema } from '@/lib/utils/validation/auth';
 
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { email, password, name } = body;
+    const validatedData = registerSchema.safeParse(body);
 
-    if (!email || !password) {
-      return NextResponse.json(
-        { error: 'Email and password are required' },
-        { status: 400 }
-      );
+    if (!validatedData.success) {
+      const fieldErrors = validatedData.error.flatten().fieldErrors;
+      const firstError = Object.values(fieldErrors)[0]?.[0] || 'Invalid input';
+
+      return NextResponse.json({ error: firstError }, { status: 400 });
     }
 
-    if (!validateEmail(email)) {
-      return NextResponse.json(
-        { error: 'Invalid email format' },
-        { status: 400 }
-      );
-    }
-
-    const passwordValidation = validatePassword(password);
-    if (!passwordValidation.isValid) {
-      return NextResponse.json(
-        { error: passwordValidation.errors },
-        { status: 400 }
-      );
-    }
+    const { email, password, name } = validatedData.data;
 
     const existingUser = await prisma.user.findUnique({
       where: { email },
@@ -48,9 +35,8 @@ export async function POST(request: Request) {
         email: email.toLowerCase(),
         password: hashedPassword,
         name: name ? name.trim() : null,
-        menopauseStage: 'PERIMENOPAUSE', // Default to perimenopause
+        menopauseStage: 'PERIMENOPAUSE',
       },
-
       select: {
         id: true,
         email: true,
