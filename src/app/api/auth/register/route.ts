@@ -2,8 +2,11 @@ import { NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcrypt';
 import { registerSchema } from '@/lib/utils/validation/auth';
+import type { RegisterResponse } from '@/lib/types';
 
-export async function POST(request: Request) {
+export async function POST(
+  request: Request
+): Promise<NextResponse<RegisterResponse>> {
   try {
     const body = await request.json();
     const validatedData = registerSchema.safeParse(body);
