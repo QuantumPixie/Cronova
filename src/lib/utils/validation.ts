@@ -36,35 +36,3 @@ export const validatePassword = (
     errors,
   };
 };
-
-export const validateName = (
-  name: string
-): {
-  isValid: boolean;
-  error?: string;
-} => {
-  if (name.length < 2) {
-    return {
-      isValid: false,
-      error: 'Name must be at least 2 characters',
-    };
-  }
-
-  if (name.length > 50) {
-    return {
-      isValid: false,
-      error: 'Name must be at most 50 characters',
-    };
-  }
-
-  if (!/^[a-zA-Z\s'-]+$/.test(name)) {
-    return {
-      isValid: false,
-      error: 'Name contains invalid characters',
-    };
-  }
-
-  return {
-    isValid: true,
-  };
-};
