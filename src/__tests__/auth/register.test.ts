@@ -12,7 +12,6 @@ describe('POST /api/auth/register', () => {
       createdAt: new Date(),
     };
 
-
     (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(null);
     (prisma.user.create as jest.Mock).mockResolvedValueOnce(mockUser);
 
@@ -22,6 +21,8 @@ describe('POST /api/auth/register', () => {
         email: 'test@example.com',
         password: 'Test123!@#',
         name: 'Test User',
+        menopauseStage: 'PERIMENOPAUSE',
+        createdAt: new Date(),
       }),
     });
 
