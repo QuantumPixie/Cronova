@@ -12,7 +12,7 @@ describe('POST /api/auth/register', () => {
       createdAt: new Date(),
     };
 
-    // Mock the Prisma calls
+
     (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce(null);
     (prisma.user.create as jest.Mock).mockResolvedValueOnce(mockUser);
 
@@ -39,7 +39,6 @@ describe('POST /api/auth/register', () => {
   });
 
   it('should return error for existing email', async () => {
-    // Mock finding an existing user
     (prisma.user.findUnique as jest.Mock).mockResolvedValueOnce({
       id: 'existing-id',
       email: 'test@example.com',
