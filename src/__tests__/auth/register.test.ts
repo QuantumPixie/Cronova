@@ -3,6 +3,12 @@ import { POST } from '@/app/api/auth/register/route';
 import { NextRequest } from 'next/server';
 
 describe('POST /api/auth/register', () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+    (prisma.user.findUnique as jest.Mock).mockReset();
+    (prisma.user.create as jest.Mock).mockReset();
+  });
+
   it('should register a new user successfully', async () => {
     const mockUser = {
       id: 'test-id',

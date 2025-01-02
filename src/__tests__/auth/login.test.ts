@@ -6,6 +6,12 @@ import bcrypt from 'bcrypt';
 jest.mock('bcrypt');
 
 describe('POST /api/auth/login', () => {
+  beforeEach(() => {
+    jest.resetAllMocks();
+    (prisma.user.findUnique as jest.Mock).mockReset();
+    (prisma.user.create as jest.Mock).mockReset();
+  });
+
   it('should login a user successfully', async () => {
     const hashedPassword = await bcrypt.hash('Test123!@#', 10);
     const mockUser = {
