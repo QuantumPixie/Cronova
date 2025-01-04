@@ -34,7 +34,7 @@ model User {
     emailVerified DateTime?
     name String?
     menopauseStage MenopauseStage? @default(PERIMENOPAUSE)
-    lastPeriodDate DateTime?
+    lastPeriodDate String?
     createdAt DateTime @default(now())
     updatedAt DateTime @updatedAt
     symptoms SymptomEntry[]
@@ -45,7 +45,7 @@ model User {
 model SymptomEntry {
     id String @id @default(cuid())
     userId String
-    date DateTime
+    date String
     hotFlashes Int
     nightSweats Int
     moodSwings Int
@@ -64,7 +64,7 @@ model SymptomEntry {
 model Insight {
     id String @id @default(cuid())
     userId String
-    date DateTime
+    date String
     content String @db.Text
     recommendations String[]
     source String
@@ -79,7 +79,7 @@ model Insight {
 model JournalEntry {
     id String @id @default(cuid())
     userId String
-    date DateTime
+    date String
     mood Mood @default(NEUTRAL)
     sleep Int
     exercise Boolean?
