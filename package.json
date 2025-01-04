@@ -12,6 +12,7 @@
     "test:watch": "jest --watch"
   },
   "dependencies": {
+    "@auth/prisma-adapter": "^2.7.4",
     "@huggingface/inference": "^2.8.1",
     "@prisma/client": "^6.1.0",
     "@radix-ui/react-popover": "^1.1.4",
