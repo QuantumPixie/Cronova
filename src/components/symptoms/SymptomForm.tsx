@@ -75,10 +75,10 @@ export function SymptomForm({ onSubmit, initialData }: SymptomFormProps) {
           id='date'
           max={today}
           value={formData.date}
-          onChange={(e) =>
+          onChange={(event) =>
             setFormData((prev) => ({
               ...prev,
-              date: e.target.value,
+              date: event.target.value,
             }))
           }
           className='mt-1 block w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500'
@@ -100,10 +100,10 @@ export function SymptomForm({ onSubmit, initialData }: SymptomFormProps) {
             min='0'
             max='10'
             value={formData[name as keyof typeof formData]}
-            onChange={(e) =>
+            onChange={(event) =>
               setFormData((prev) => ({
                 ...prev,
-                [name]: Number(e.target.value),
+                [name]: Number(event.target.value),
               }))
             }
             className='mt-1 block w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500'
@@ -122,10 +122,10 @@ export function SymptomForm({ onSubmit, initialData }: SymptomFormProps) {
         <select
           id='intensity'
           value={formData.intensity}
-          onChange={(e) =>
+          onChange={(event) =>
             setFormData((prev) => ({
               ...prev,
-              intensity: e.target.value as 'MILD' | 'MODERATE' | 'SEVERE',
+              intensity: event.target.value as 'MILD' | 'MODERATE' | 'SEVERE',
             }))
           }
           className='mt-1 block w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500'
@@ -150,10 +150,10 @@ export function SymptomForm({ onSubmit, initialData }: SymptomFormProps) {
           id='notes'
           rows={3}
           value={formData.notes}
-          onChange={(e) =>
+          onChange={(event) =>
             setFormData((prev) => ({
               ...prev,
-              notes: e.target.value,
+              notes: event.target.value,
             }))
           }
           className='mt-1 block w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500'
