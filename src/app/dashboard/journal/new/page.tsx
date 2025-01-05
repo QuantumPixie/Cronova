@@ -8,25 +8,36 @@ export default function NewJournalPage() {
   const router = useRouter();
 
   async function createJournalEntry(data: JournalFormData) {
-    const response = await fetch('/api/journal', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(data),
-    });
+    try {
+      const response = await fetch('/api/journal', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
 
-    if (!response.ok) {
-      throw new Error('Failed to create journal entry');
+      if (!response.ok) {
+        throw new Error('Failed to create journal entry');
+      }
+
+      const result = await response.json();
+
+      if (result.success) {
+        router.push('/dashboard/journal');
+        router.refresh();
+      }
+    } catch (error) {
+      console.error('Error:', error);
+      throw error;
     }
-
-    router.push('/dashboard/journal');
-    router.refresh();
   }
 
   return (
-    <div className='p-6'>
-      <h1 className='text-2xl font-bold mb-6'>New Journal Entry</h1>
+    <div className='p-6 max-w-2xl mx-auto'>
+      <div className='flex justify-between items-center mb-6'>
+        <h1 className='text-2xl font-bold text-[#800020]'>New Journal Entry</h1>
+      </div>
       <JournalForm onSubmit={createJournalEntry} />
     </div>
   );

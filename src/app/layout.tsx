@@ -1,3 +1,4 @@
+import './globals.css';
 import { Geist } from 'next/font/google';
 import { AuthProvider } from '@/components/auth/AuthProvider';
 

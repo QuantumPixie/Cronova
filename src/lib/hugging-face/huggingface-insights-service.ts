@@ -23,18 +23,16 @@ export class InsightsGenerator {
     source: string;
   }> {
     try {
-      const prompt = this.createDetailedInsightPrompt(symptoms, journalEntry);
+      const prompt = this.createPrompt(symptoms, journalEntry);
       const response = await this.hf.textGeneration({
         model: 'tiiuae/falcon-7b-instruct',
         inputs: prompt,
         parameters: {
-          max_new_tokens: 250,
+          max_new_tokens: 350,
           temperature: 0.7,
           return_full_text: false,
         },
       });
-
-      console.log('Generated text:', response.generated_text);
 
       return this.parseInsights(response.generated_text || '');
     } catch (error) {
@@ -43,39 +41,34 @@ export class InsightsGenerator {
     }
   }
 
-  private createDetailedInsightPrompt(
+  private createPrompt(
     symptoms: SymptomFormData,
     journalEntry: JournalFormData
   ): string {
-    return `
-Based on the provided health data, generate a personalized and actionable insight, considering the user's symptoms and lifestyle context.
+    return `Analyze the following health data and provide a personalized response:
 
-### Symptoms
-- Hot Flashes: ${symptoms.hotFlashes}/10 (e.g., mild, moderate, severe)
+Symptoms:
+- Hot Flashes: ${symptoms.hotFlashes}/10
 - Night Sweats: ${symptoms.nightSweats}/10
 - Mood Swings: ${symptoms.moodSwings}/10
 - Sleep Issues: ${symptoms.sleepIssues}/10
 - Anxiety: ${symptoms.anxiety}/10
 - Fatigue: ${symptoms.fatigue}/10
-- Symptom Intensity: ${symptoms.intensity}
-- Date: ${symptoms.date}
+- Intensity: ${symptoms.intensity}
 
-### Journal Entry
+Journal Entry:
 - Mood: ${journalEntry.mood}
-- Sleep Duration: ${journalEntry.sleep} hours
-- Physical Activity: ${journalEntry.exercise ? 'Active' : 'Sedentary'}
-- Stress Level: ${journalEntry.stress}/10
-- Date: ${journalEntry.date}
+- Sleep: ${journalEntry.sleep} hours
+- Exercise: ${journalEntry.exercise ? 'Yes' : 'No'}
+- Stress: ${journalEntry.stress}/10
 
-### Instructions
-1. Insights: Analyze the correlation between the symptoms and lifestyle data. Highlight how certain habits or triggers might influence the severity of symptoms.
-2. Triggers: Identify potential symptom triggers based on the data provided.
-3. Recommendations: Provide 3 actionable and specific recommendations for managing these symptoms. Tailor them to the user's reported severity and lifestyle.
-4. Holistic Management Strategies: Suggest broader lifestyle adjustments for long-term symptom relief.
-5. Tone: Use an empathetic, conversational tone while maintaining a concise format.
+Please provide:
+1. A correlation between symptoms and lifestyle factors.
+2. Identification of potential triggers.
+3. Three actionable recommendations.
+4. Holistic strategies for managing symptoms effectively.
 
-Format your response clearly and concisely with headings for each section. Avoid unnecessary verbosity.
-    `.trim();
+Use a structured and empathetic tone in your response.`;
   }
 
   private parseInsights(generatedText: string): {
@@ -84,38 +77,20 @@ Format your response clearly and concisely with headings for each section. Avoid
     associatedSymptoms: string[];
     source: string;
   } {
-    const insightRegex = /### Insights[\s\S]*?(?=###|$)/i;
-    const recommendationRegex = /### Recommendations[\s\S]*?(?=###|$)/i;
-    const holisticRegex =
-      /### Holistic Management Strategies[\s\S]*?(?=###|$)/i;
-
-    console.log('Parsing generated text:', generatedText);
-
-    const insightsContent =
-      generatedText.match(insightRegex)?.[0]?.trim() || '';
-    console.log('Extracted Insights:', insightsContent);
-    const holisticContent =
-      generatedText.match(holisticRegex)?.[0]?.trim() || '';
-    console.log('Extracted Holistic Content:', holisticContent);
-
-    const content = `${insightsContent}\n\n${holisticContent}`;
-
-    const recommendations = this.extractRecommendations(
-      generatedText.match(recommendationRegex)?.[0] || ''
-    );
+    const cleanedText = generatedText.trim();
 
     return {
-      content: content,
-      recommendations: recommendations,
-      associatedSymptoms: this.extractAssociatedSymptoms(generatedText),
-      source: 'HuggingFace AI Insights',
+      content: cleanedText,
+      recommendations: this.extractRecommendations(cleanedText),
+      associatedSymptoms: this.extractAssociatedSymptoms(cleanedText),
+      source: 'Salesforce XGen AI Insights',
     };
   }
 
   private extractRecommendations(text: string): string[] {
-    const recommendationRegex = /(?:\d+\.|Recommendation):\s*(.+)/g;
-    const matches = Array.from(text.matchAll(recommendationRegex));
-    return matches.map((match) => match[1].trim());
+    const recommendationRegex = /Recommendation\s*\d+:?\s*([^\n]+)/gi;
+    const matches = text.matchAll(recommendationRegex);
+    return Array.from(matches, (match) => match[1].trim()).slice(0, 3);
   }
 
   private extractAssociatedSymptoms(text: string): string[] {
@@ -140,12 +115,12 @@ Format your response clearly and concisely with headings for each section. Avoid
       content:
         'Based on your current symptoms and journal entry, it appears you may be experiencing typical menopausal challenges.',
       recommendations: [
-        'Maintain a consistent sleep schedule',
-        'Practice stress-reduction techniques like meditation',
-        'Consult with your healthcare provider about your symptoms',
+        'Maintain a consistent sleep schedule.',
+        'Practice stress-reduction techniques like meditation.',
+        'Consult with your healthcare provider about your symptoms.',
       ],
       associatedSymptoms: ['Mood Changes', 'Sleep Disruption'],
-      source: 'CroNova Default Insights',
+      source: 'Default Insights',
     };
   }
 }

@@ -49,7 +49,10 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
   const today = new Date().toISOString().split('T')[0];
 
   return (
-    <form onSubmit={handleSubmit} className='space-y-6'>
+    <form
+      onSubmit={handleSubmit}
+      className='max-w-2xl mx-auto space-y-6 bg-white p-6 rounded-lg shadow-md border border-[#E3BAB3] sm:p-8'
+    >
       {error && (
         <div className='p-3 text-sm text-red-500 bg-red-100 rounded'>
           {error}
@@ -59,7 +62,7 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
       <div>
         <label
           htmlFor='date'
-          className='block text-sm font-medium text-gray-700'
+          className='block text-sm font-medium text-[#800020]'
         >
           Date
         </label>
@@ -74,7 +77,7 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
               date: event.target.value,
             }))
           }
-          className='mt-1 block w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500'
+          className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
           required
         />
       </div>
@@ -82,7 +85,7 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
       <div>
         <label
           htmlFor='mood'
-          className='block text-sm font-medium text-gray-700'
+          className='block text-sm font-medium text-[#800020]'
         >
           Mood
         </label>
@@ -95,7 +98,7 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
               mood: event.target.value as typeof formData.mood,
             }))
           }
-          className='mt-1 block w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500'
+          className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
           required
         >
           {MOOD_OPTIONS.map(({ value, label }) => (
@@ -109,7 +112,7 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
       <div>
         <label
           htmlFor='sleep'
-          className='block text-sm font-medium text-gray-700'
+          className='block text-sm font-medium text-[#800020]'
         >
           Hours of Sleep
         </label>
@@ -125,7 +128,7 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
               sleep: Number(event.target.value),
             }))
           }
-          className='mt-1 block w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500'
+          className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
           required
         />
       </div>
@@ -141,16 +144,16 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
                 exercise: event.target.checked,
               }))
             }
-            className='rounded border-gray-300 text-blue-600 focus:ring-blue-500'
+            className='rounded border-[#E3BAB3] text-[#800020] focus:ring-[#800020]'
           />
-          <span className='ml-2 text-sm text-gray-700'>Exercise today?</span>
+          <span className='ml-2 text-sm text-[#4A4A4A]'>Exercise today?</span>
         </label>
       </div>
 
       <div>
         <label
           htmlFor='stress'
-          className='block text-sm font-medium text-gray-700'
+          className='block text-sm font-medium text-[#800020]'
         >
           Stress Level (0-10)
         </label>
@@ -166,14 +169,14 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
               stress: Number(event.target.value),
             }))
           }
-          className='mt-1 block w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500'
+          className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
         />
       </div>
 
       <div>
         <label
           htmlFor='notes'
-          className='block text-sm font-medium text-gray-700'
+          className='block text-sm font-medium text-[#800020]'
         >
           Notes
         </label>
@@ -187,7 +190,7 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
               notes: event.target.value,
             }))
           }
-          className='mt-1 block w-full rounded border border-gray-300 p-2 focus:border-blue-500 focus:ring-blue-500'
+          className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
           placeholder='Add any additional notes about your day...'
         />
       </div>
@@ -195,7 +198,7 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
       <button
         type='submit'
         disabled={isLoading}
-        className='w-full rounded bg-blue-600 px-4 py-2 text-white hover:bg-blue-700 disabled:opacity-50 disabled:cursor-not-allowed'
+        className='w-full rounded bg-[#800020] px-4 py-2 text-[#E3BAB3] hover:bg-[#a36c53] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200'
       >
         {isLoading ? 'Saving...' : 'Save Journal Entry'}
       </button>

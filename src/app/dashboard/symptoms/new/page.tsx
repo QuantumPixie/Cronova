@@ -37,8 +37,10 @@ export default function NewSymptomPage() {
   }
 
   return (
-    <div className='p-6'>
-      <h1 className='text-2xl font-bold mb-6'>Log New Symptoms</h1>
+    <div className='p-6 max-w-2xl mx-auto'>
+      <div className='flex justify-between items-center mb-6'>
+        <h1 className='text-2xl font-bold text-[#800020]'>Log New Symptoms</h1>
+      </div>
       <SymptomForm onSubmit={createSymptom} />
     </div>
   );
