@@ -23,4 +23,5 @@ export interface AuthenticatedUser {
 export interface RateLimitResponse {
   success: boolean;
   remaining: number;
+  resetTime?: number;
 }

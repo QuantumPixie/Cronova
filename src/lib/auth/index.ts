@@ -3,6 +3,7 @@ import { NextAuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { prisma } from '@/lib/prisma';
 import bcrypt from 'bcrypt';
+import { checkRateLimit } from '@/lib/services/rate-limit-service';
 
 export const authOptions: NextAuthOptions = {
   adapter: PrismaAdapter(prisma),
@@ -27,10 +28,16 @@ export const authOptions: NextAuthOptions = {
           throw new Error('Please enter your password');
         }
 
+        const rateLimitResult = checkRateLimit(credentials.email);
+        if (!rateLimitResult.success) {
+          throw new Error(
+            `Too many login attempts. Please try again in 15 minutes. ${rateLimitResult.remaining} attempts remaining.`
+          );
+        }
+
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
         });
-        console.log('Found user:', user);
 
         if (!user) {
           throw new Error('No account found with this email address');
@@ -40,13 +47,17 @@ export const authOptions: NextAuthOptions = {
           credentials.password,
           user.password
         );
-        console.log('Password valid:', isPasswordValid);
 
-       if (!isPasswordValid) {
-         throw new Error('Invalid password. Please try again');
-       }
+        if (!isPasswordValid) {
+          throw new Error('Invalid password. Please try again');
+        }
 
-        return { id: user.id, email: user.email };
+        return {
+          id: user.id,
+          email: user.email,
+          name: user.name,
+          menopauseStage: user.menopauseStage,
+        };
       },
     }),
   ],
