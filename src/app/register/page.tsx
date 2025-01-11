@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useRouter } from 'next/navigation';
+import { signIn } from 'next-auth/react';
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -16,14 +17,16 @@ export default function RegisterPage() {
     setError(null);
 
     const formData = new FormData(event.currentTarget);
+    const email = formData.get('email') as string;
+    const password = formData.get('password') as string;
 
     try {
       const res = await fetch('/api/auth/register', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          email: formData.get('email'),
-          password: formData.get('password'),
+          email: email,
+          password: password,
           name: formData.get('name'),
         }),
       });
@@ -34,7 +37,17 @@ export default function RegisterPage() {
         throw new Error(data.error || 'Something went wrong');
       }
 
-      router.push('/login');
+      const signInResult = await signIn('credentials', {
+        email,
+        password,
+        redirect: false,
+      });
+
+      if (signInResult?.error) {
+        throw new Error(signInResult.error);
+      }
+
+      router.push('/onboarding');
     } catch (err) {
       setError(err instanceof Error ? err.message : 'Something went wrong');
     } finally {

@@ -19,6 +19,7 @@ const NAV_ITEMS = [
   { href: '/dashboard/symptoms', label: 'Symptoms', icon: Calendar },
   { href: '/dashboard/journal', label: 'Journal', icon: BookOpen },
   { href: '/dashboard/insights', label: 'Insights', icon: LineChart },
+  // { href: '/settings', label: 'Settings', icon: Settings },
 ];
 
 export default function DashboardLayout({
