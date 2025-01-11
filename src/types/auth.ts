@@ -1,16 +1,22 @@
 import { MenopauseStage } from '@prisma/client';
 
-export type UserResponse = {
+export interface UserResponse {
   id: string;
   email: string;
   name: string | null;
-  menopauseStage: 'PERIMENOPAUSE' | 'MENOPAUSE' | 'POSTMENOPAUSE' | null;
+  menopauseStage: MenopauseStage | null;
+  emailVerified?: Date | null;
   createdAt: Date;
-};
+  updatedAt: Date;
+}
 
 export interface LoginCredentials {
   email: string;
   password: string;
+}
+
+export interface RegisterCredentials extends LoginCredentials {
+  name?: string;
 }
 
 export interface AuthenticatedUser {
@@ -23,5 +29,17 @@ export interface AuthenticatedUser {
 export interface RateLimitResponse {
   success: boolean;
   remaining: number;
-  resetTime?: number;
+  resetTime: number;
 }
+
+export interface AuthError {
+  error: string;
+  status: number;
+}
+
+export type AuthResponse = {
+  success: boolean;
+  data?: AuthenticatedUser;
+  error?: string;
+  rateLimitInfo?: RateLimitResponse;
+};

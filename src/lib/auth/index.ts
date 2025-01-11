@@ -1,4 +1,3 @@
-import { PrismaAdapter } from '@auth/prisma-adapter';
 import { NextAuthOptions } from 'next-auth';
 import Credentials from 'next-auth/providers/credentials';
 import { prisma } from '@/lib/prisma';
@@ -6,7 +5,6 @@ import bcrypt from 'bcrypt';
 import { checkRateLimit } from '@/lib/services/rate-limit-service';
 
 export const authOptions: NextAuthOptions = {
-  adapter: PrismaAdapter(prisma),
   session: {
     strategy: 'jwt',
   },
@@ -37,6 +35,14 @@ export const authOptions: NextAuthOptions = {
 
         const user = await prisma.user.findUnique({
           where: { email: credentials.email },
+          select: {
+            id: true,
+            email: true,
+            password: true,
+            name: true,
+            menopauseStage: true,
+            emailVerified: true,
+          },
         });
 
         if (!user) {
@@ -57,6 +63,7 @@ export const authOptions: NextAuthOptions = {
           email: user.email,
           name: user.name,
           menopauseStage: user.menopauseStage,
+          emailVerified: user.emailVerified,
         };
       },
     }),
@@ -68,6 +75,7 @@ export const authOptions: NextAuthOptions = {
         session.user.email = token.email;
         session.user.name = token.name;
         session.user.menopauseStage = token.menopauseStage;
+        session.user.emailVerified = token.emailVerified;
       }
       return session;
     },
@@ -77,6 +85,7 @@ export const authOptions: NextAuthOptions = {
         token.email = user.email;
         token.name = user.name;
         token.menopauseStage = user.menopauseStage;
+        token.emailVerified = user.emailVerified;
       }
       return token;
     },
