@@ -50,7 +50,7 @@ export default function LoginPage() {
           <div className='flex justify-between items-center h-16'>
             <Link href='/' className='flex items-center gap-2'>
               <Image
-                src='/logo.webp'
+                src='/croNova-logo.webp'
                 alt='CroNova Logo'
                 width={32}
                 height={32}

@@ -40,7 +40,7 @@ export default function DashboardLayout({
               className='flex items-center gap-2 flex-shrink-0'
             >
               <Image
-                src='/logo.webp'
+                src='/croNova-logo.webp'
                 alt='CroNova Logo'
                 width={32}
                 height={32}
@@ -70,7 +70,7 @@ export default function DashboardLayout({
 
             <div className='hidden md:flex items-center space-x-4'>
               <Link
-                href='/settings'
+                href='/dashboard/settings'
                 className='inline-flex items-center px-4 py-2 text-sm font-medium text-[#800020] hover:bg-[#DCB1A7] rounded-md transition-all duration-200'
               >
                 <Settings className='w-4 h-4 mr-2' />

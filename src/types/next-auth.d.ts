@@ -1,5 +1,6 @@
-import 'next-auth';
 import { MenopauseStage } from '@prisma/client';
+import 'next-auth';
+import { DefaultSession } from 'next-auth';
 
 declare module 'next-auth' {
   interface Session {
@@ -9,7 +10,9 @@ declare module 'next-auth' {
       name: string | null;
       menopauseStage: MenopauseStage | null;
       emailVerified: Date | null;
-    };
+      lastPeriodDate: string | null;
+      periodDates: string[];
+    } & DefaultSession['user'];
   }
 
   interface User {
@@ -18,6 +21,8 @@ declare module 'next-auth' {
     name: string | null;
     menopauseStage: MenopauseStage | null;
     emailVerified: Date | null;
+    lastPeriodDate: string | null;
+    periodDates: string[];
   }
 }
 
@@ -28,5 +33,7 @@ declare module 'next-auth/jwt' {
     name: string | null;
     menopauseStage: MenopauseStage | null;
     emailVerified: Date | null;
+    lastPeriodDate: string | null;
+    periodDates: string[];
   }
 }

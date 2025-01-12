@@ -5,13 +5,13 @@ import { Calendar, BookOpen, LineChart, Shield, Sparkles } from 'lucide-react';
 export default function Home() {
   return (
     <div className='min-h-screen bg-gradient-to-b from-[#F5F2F2] to-[#F7E8E8]'>
-      {/* Hero section */}
+
       <nav className='bg-gradient-to-r from-[#E3BAB3] to-[#B76E79]'>
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8'>
           <div className='flex justify-between items-center h-16'>
             <div className='flex items-center gap-2'>
               <Image
-                src='/logo.webp'
+                src='/croNova-logo.webp'
                 alt='CroNova Logo'
                 width={32}
                 height={32}
@@ -41,9 +41,9 @@ export default function Home() {
       </nav>
 
       <main>
-        {/* Hero Section */}
+
         <div className='max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-16 pb-24 relative'>
-          {/* Decorative elements */}
+
           <div className='absolute top-10 left-10 text-[#FFD700] opacity-30'>
             <Sparkles className='w-8 h-8' />
           </div>
@@ -90,9 +90,9 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Features Section */}
+
         <div className='bg-gradient-to-b from-white to-[#F7E8E8] py-24 relative'>
-          {/* More decorative elements */}
+
           <div className='absolute top-0 left-1/4 text-[#FFD700] opacity-20'>
             <Sparkles className='w-6 h-6' />
           </div>
@@ -166,7 +166,7 @@ export default function Home() {
           </div>
         </div>
 
-        {/* Footer */}
+
         <footer className='bg-gradient-to-r from-[#E3BAB3] to-[#B76E79]'>
           <div className='max-w-7xl mx-auto py-12 px-4 sm:px-6 lg:px-8'>
             <div className='flex justify-between items-center'>
