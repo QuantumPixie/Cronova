@@ -21,7 +21,11 @@ export default function DashboardCard({
   stats,
 }: DashboardCardProps) {
   return (
-    <Link href={href} className='group block'>
+    <Link
+      href={href}
+      className='group block'
+      aria-labelledby={`card-title-${title.toLowerCase().replace(/\s+/g, '-')}`}
+    >
       <div className='bg-white rounded-lg border border-[#E3BAB3] shadow-sm transition-all duration-200 ease-in-out hover:shadow-md hover:border-[#B76E79]'>
         <div className='p-6'>
           <div className='flex items-start space-x-4'>
@@ -31,7 +35,10 @@ export default function DashboardCard({
               </div>
             </div>
             <div className='flex-1 min-w-0'>
-              <h3 className='text-lg font-semibold text-[#800020] group-hover:text-[#a36c53] transition-colors'>
+              <h3
+                id={`card-title-${title.toLowerCase().replace(/\s+/g, '-')}`}
+                className='text-lg font-semibold text-[#800020] group-hover:text-[#a36c53] transition-colors'
+              >
                 {title}
               </h3>
               <p className='mt-1 text-sm text-[#4A4A4A]'>{description}</p>
@@ -41,7 +48,10 @@ export default function DashboardCard({
                     <p className='text-sm font-medium text-[#4A4A4A]'>
                       {stats.label}
                     </p>
-                    <p className='text-2xl font-semibold text-[#800020]'>
+                    <p
+                      className='text-2xl font-semibold text-[#800020]'
+                      aria-label={`${stats.label}: ${stats.value}`}
+                    >
                       {stats.value}
                     </p>
                   </div>

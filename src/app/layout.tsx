@@ -14,7 +14,11 @@ export default function RootLayout({
   return (
     <html lang='en'>
       <body className={geist.className}>
-        <AuthProvider>{children}</AuthProvider>
+        <AuthProvider>
+          <div role='application' aria-label='CroNova application'>
+            {children}
+          </div>
+        </AuthProvider>
       </body>
     </html>
   );

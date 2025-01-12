@@ -9,8 +9,6 @@ export default function NewSymptomPage() {
 
   async function createSymptom(data: SymptomFormData) {
     try {
-      console.log('Sending data:', data);
-
       const response = await fetch('/api/symptoms', {
         method: 'POST',
         headers: {
@@ -24,7 +22,6 @@ export default function NewSymptomPage() {
       }
 
       const result = await response.json();
-      console.log('Response:', result);
 
       if (result.success) {
         router.push('/dashboard/symptoms');
@@ -37,11 +34,15 @@ export default function NewSymptomPage() {
   }
 
   return (
-    <div className='p-6 max-w-2xl mx-auto'>
-      <div className='flex justify-between items-center mb-6'>
-        <h1 className='text-2xl font-bold text-[#800020]'>Log New Symptoms</h1>
+    <div className='p-6 max-w-2xl mx-auto' role='main'>
+      <div className='flex justify-between items-center mb-6' role='banner'>
+        <h1 className='text-2xl font-bold text-[#800020]' id='page-title'>
+          Log New Symptoms
+        </h1>
       </div>
-      <SymptomForm onSubmit={createSymptom} />
+      <div role='form' aria-labelledby='page-title'>
+        <SymptomForm onSubmit={createSymptom} />
+      </div>
     </div>
   );
 }

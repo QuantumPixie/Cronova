@@ -14,5 +14,9 @@ export default async function DashboardRootLayout({
     redirect('/login');
   }
 
-  return <DashboardLayout>{children}</DashboardLayout>;
+  return (
+    <div role='main' aria-label='Dashboard layout'>
+      <DashboardLayout>{children}</DashboardLayout>
+    </div>
+  );
 }

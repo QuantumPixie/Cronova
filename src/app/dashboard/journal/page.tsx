@@ -21,47 +21,62 @@ export default async function JournalPage() {
   });
 
   return (
-    <div className='p-6 max-w-4xl mx-auto'>
-      <div className='flex justify-between items-center mb-6'>
+    <div className='p-6 max-w-4xl mx-auto' role='main'>
+      <div className='flex justify-between items-center mb-6' role='banner'>
         <h1 className='text-2xl font-bold text-[#800020]'>Journal Entries</h1>
         <Link
           href='/dashboard/journal/new'
           className='px-4 py-2 bg-[#800020] text-[#E3BAB3] rounded hover:bg-[#a36c53] transition-colors duration-200'
+          aria-label='Create new journal entry'
         >
-          New Entry
+          Add New Entry
         </Link>
       </div>
 
-      <div className='space-y-4'>
+      <div className='space-y-4' role='feed' aria-label='Journal entries list'>
         {entries.map((entry) => (
-          <div
+          <article
             key={entry.id}
             className='border border-[#E3BAB3] rounded-lg p-4 hover:bg-[#F5F2F2] transition-colors duration-200'
+            aria-labelledby={`journal-date-${entry.id}`}
           >
             <div className='flex justify-between items-start'>
               <div>
-                <p className='font-medium text-[#4A4A4A]'>{entry.date}</p>
-                <p className='text-sm text-[#800020]'>
+                <p
+                  id={`journal-date-${entry.id}`}
+                  className='font-medium text-[#4A4A4A]'
+                >
+                  {entry.date}
+                </p>
+                <p
+                  className='text-sm text-[#800020]'
+                  aria-label={`Mood: ${entry.mood.toLowerCase()}`}
+                >
                   Mood: {entry.mood.toLowerCase()}
                 </p>
-                {entry.exercise && (
-                  <span className='text-sm text-[#B76E79]'>🏃 Exercised</span>
-                )}
               </div>
               <Link
                 href={`/dashboard/journal/${entry.id}`}
                 className='text-[#800020] hover:underline hover:text-[#B76E79] transition-colors duration-200'
+                aria-label={`View details for journal entry from ${entry.date}`}
               >
                 View Details
               </Link>
             </div>
-          </div>
+          </article>
         ))}
 
         {entries.length === 0 && (
-          <p className='text-center text-[#4A4A4A] py-8'>
-            No journal entries yet. Start journaling to track your journey.
-          </p>
+          <div
+            className='text-center text-[#4A4A4A] py-8'
+            role='status'
+            aria-label='No journal entries'
+          >
+            <p>
+              No journal entries yet. Start documenting your journey to track
+              your progress.
+            </p>
+          </div>
         )}
       </div>
     </div>

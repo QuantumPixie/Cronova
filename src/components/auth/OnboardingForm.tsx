@@ -61,7 +61,11 @@ export function OnboardingForm() {
   }
 
   return (
-    <div className='max-w-md mx-auto p-6 bg-white rounded-lg shadow-md border border-[#E3BAB3]'>
+    <div
+      className='max-w-md mx-auto p-6 bg-white rounded-lg shadow-md border border-[#E3BAB3]'
+      role='region'
+      aria-label='Onboarding Form'
+    >
       <h2 className='text-xl font-bold text-[#800020] mb-4'>
         Welcome to CroNova
       </h2>
@@ -69,16 +73,25 @@ export function OnboardingForm() {
         Let&apos;s set up your profile to personalize your experience.
       </p>
 
-      <form onSubmit={handleSubmit} className='space-y-6'>
+      <form
+        onSubmit={handleSubmit}
+        className='space-y-6'
+        aria-label='Profile setup form'
+      >
         {error && (
-          <div className='p-3 text-sm text-red-500 bg-red-100 rounded'>
+          <div
+            className='p-3 text-sm text-red-500 bg-red-100 rounded'
+            role='alert'
+            aria-live='polite'
+          >
             {error}
           </div>
         )}
 
         {step === 1 && (
-          <div>
+          <div role='group' aria-labelledby='stage-label'>
             <label
+              id='stage-label'
               htmlFor='menopauseStage'
               className='block text-sm font-medium text-[#800020]'
             >
@@ -91,6 +104,7 @@ export function OnboardingForm() {
               onChange={(e) => handleStageSelect(e.target.value)}
               className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020]'
               required
+              aria-required='true'
             >
               <option value=''>Select a stage</option>
               <option value='PERIMENOPAUSE'>Perimenopause</option>
@@ -101,8 +115,9 @@ export function OnboardingForm() {
         )}
 
         {step === 2 && (
-          <div>
+          <div role='group' aria-labelledby='period-label'>
             <label
+              id='period-label'
               htmlFor='lastPeriodDate'
               className='block text-sm font-medium text-[#800020]'
             >
@@ -120,11 +135,13 @@ export function OnboardingForm() {
                 }))
               }
               className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020]'
+              aria-label='Select your last period date'
             />
             <button
               type='submit'
               disabled={isLoading}
               className='mt-4 w-full rounded bg-[#800020] px-4 py-2 text-[#E3BAB3] hover:bg-[#a36c53] disabled:opacity-50 transition-colors duration-200'
+              aria-disabled={isLoading}
             >
               {isLoading ? 'Saving...' : 'Complete Setup'}
             </button>

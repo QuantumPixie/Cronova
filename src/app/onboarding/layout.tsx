@@ -13,5 +13,9 @@ export default async function OnboardingLayout({
     redirect('/login');
   }
 
-  return <>{children}</>;
+  return (
+    <div role='main' aria-label='Onboarding flow'>
+      {children}
+    </div>
+  );
 }

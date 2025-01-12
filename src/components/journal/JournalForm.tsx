@@ -52,15 +52,21 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
     <form
       onSubmit={handleSubmit}
       className='max-w-2xl mx-auto space-y-6 bg-white p-6 rounded-lg shadow-md border border-[#E3BAB3] sm:p-8'
+      aria-label='Journal Entry Form'
     >
       {error && (
-        <div className='p-3 text-sm text-red-500 bg-red-100 rounded'>
+        <div
+          className='p-3 text-sm text-red-500 bg-red-100 rounded'
+          role='alert'
+          aria-live='polite'
+        >
           {error}
         </div>
       )}
 
-      <div>
+      <div role='group' aria-labelledby='date-label'>
         <label
+          id='date-label'
           htmlFor='date'
           className='block text-sm font-medium text-[#800020]'
         >
@@ -79,11 +85,13 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
           }
           className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
           required
+          aria-required='true'
         />
       </div>
 
-      <div>
+      <div role='group' aria-labelledby='mood-label'>
         <label
+          id='mood-label'
           htmlFor='mood'
           className='block text-sm font-medium text-[#800020]'
         >
@@ -100,6 +108,7 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
           }
           className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
           required
+          aria-required='true'
         >
           {MOOD_OPTIONS.map(({ value, label }) => (
             <option key={value} value={value}>
@@ -109,8 +118,9 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
         </select>
       </div>
 
-      <div>
+      <div role='group' aria-labelledby='sleep-label'>
         <label
+          id='sleep-label'
           htmlFor='sleep'
           className='block text-sm font-medium text-[#800020]'
         >
@@ -130,10 +140,11 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
           }
           className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
           required
+          aria-required='true'
         />
       </div>
 
-      <div>
+      <div role='group'>
         <label className='flex items-center'>
           <input
             type='checkbox'
@@ -145,13 +156,15 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
               }))
             }
             className='rounded border-[#E3BAB3] text-[#800020] focus:ring-[#800020]'
+            aria-label='Exercise today'
           />
           <span className='ml-2 text-sm text-[#4A4A4A]'>Exercise today?</span>
         </label>
       </div>
 
-      <div>
+      <div role='group' aria-labelledby='stress-label'>
         <label
+          id='stress-label'
           htmlFor='stress'
           className='block text-sm font-medium text-[#800020]'
         >
@@ -173,8 +186,9 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
         />
       </div>
 
-      <div>
+      <div role='group' aria-labelledby='notes-label'>
         <label
+          id='notes-label'
           htmlFor='notes'
           className='block text-sm font-medium text-[#800020]'
         >
@@ -192,6 +206,7 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
           }
           className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
           placeholder='Add any additional notes about your day...'
+          aria-label='Additional notes about your day'
         />
       </div>
 
@@ -199,6 +214,7 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
         type='submit'
         disabled={isLoading}
         className='w-full rounded bg-[#800020] px-4 py-2 text-[#E3BAB3] hover:bg-[#a36c53] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200'
+        aria-disabled={isLoading}
       >
         {isLoading ? 'Saving...' : 'Save Journal Entry'}
       </button>

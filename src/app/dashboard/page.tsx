@@ -23,8 +23,12 @@ export default async function DashboardPage() {
   ]);
 
   return (
-    <div className='space-y-8'>
-      <div className='bg-white shadow-sm border border-[#E8D8EE] rounded-lg p-6'>
+    <div className='space-y-8' role='main' aria-label='Dashboard'>
+      <div
+        className='bg-white shadow-sm border border-[#E8D8EE] rounded-lg p-6'
+        role='region'
+        aria-label='Welcome section'
+      >
         <div className='flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4'>
           <div>
             <h1 className='text-2xl font-bold text-[#584B6C]'>Welcome Back!</h1>
@@ -36,11 +40,14 @@ export default async function DashboardPage() {
         </div>
       </div>
 
-      <div>
+      <div role='region' aria-label='Quick actions'>
         <h2 className='text-lg font-semibold text-[#584B6C] mb-4'>
           Quick Actions
         </h2>
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'>
+        <div
+          className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6'
+          role='list'
+        >
           <DashboardCard
             title='Track Symptoms'
             description='Monitor and log your daily symptoms to track patterns over time'

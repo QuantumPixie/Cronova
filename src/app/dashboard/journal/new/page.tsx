@@ -34,11 +34,15 @@ export default function NewJournalPage() {
   }
 
   return (
-    <div className='p-6 max-w-2xl mx-auto'>
-      <div className='flex justify-between items-center mb-6'>
-        <h1 className='text-2xl font-bold text-[#800020]'>New Journal Entry</h1>
+    <div className='p-6 max-w-2xl mx-auto' role='main'>
+      <div className='flex justify-between items-center mb-6' role='banner'>
+        <h1 className='text-2xl font-bold text-[#800020]' id='page-title'>
+          New Journal Entry
+        </h1>
       </div>
-      <JournalForm onSubmit={createJournalEntry} />
+      <div role='form' aria-labelledby='page-title'>
+        <JournalForm onSubmit={createJournalEntry} />
+      </div>
     </div>
   );
 }
