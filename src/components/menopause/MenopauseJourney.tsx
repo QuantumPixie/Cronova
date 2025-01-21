@@ -2,6 +2,7 @@ import React from 'react';
 import { LineChart, Clock, Calendar } from 'lucide-react';
 import { differenceInMonths, parseISO, format } from 'date-fns';
 import { PeriodHistory } from './PeriodHistory';
+import { ErrorBoundary } from '../error/ErrorBoundary';
 
 interface MenopauseJourneyProps {
   lastPeriodDate: string | null;
@@ -48,107 +49,110 @@ export function MenopauseJourney({
   }
 
   return (
-    <div
-      className='bg-white rounded-lg shadow-sm border border-[#E3BAB3] p-6'
-      role='region'
-      aria-label='Menopause Journey Tracker'
-    >
-      <div className='flex items-center gap-2 mb-6'>
-        <LineChart className='w-5 h-5 text-[#800020]' aria-hidden='true' />
-        <h2 className='text-lg font-semibold text-[#800020]'>
-          Your Menopause Journey
-        </h2>
-      </div>
-
-      <div className='space-y-6'>
-        <div>
-          <div className='flex items-center gap-2 mb-2'>
-            <Calendar className='w-4 h-4 text-[#B76E79]' aria-hidden='true' />
-            <span className='font-medium text-[#800020]'>
-              Current Stage: {currentStage.toLowerCase()}
-            </span>
-          </div>
-          <p
-            className='text-[#4A4A4A] ml-6'
-            role='status'
-            aria-label='Stage description'
-          >
-            {getStageDescription(currentStage, monthsSinceLastPeriod)}
-          </p>
+    <ErrorBoundary>
+      <div
+        className='bg-white rounded-lg shadow-sm border border-[#E3BAB3] p-6'
+        role='region'
+        aria-label='Menopause Journey Tracker'
+      >
+        <div className='flex items-center gap-2 mb-6'>
+          <LineChart className='w-5 h-5 text-[#800020]' aria-hidden='true' />
+          <h2 className='text-lg font-semibold text-[#800020]'>
+            Your Menopause Journey
+          </h2>
         </div>
 
-        {lastPeriodDate && (
+        <div className='space-y-6'>
           <div>
             <div className='flex items-center gap-2 mb-2'>
-              <Clock className='w-4 h-4 text-[#B76E79]' aria-hidden='true' />
+              <Calendar className='w-4 h-4 text-[#B76E79]' aria-hidden='true' />
               <span className='font-medium text-[#800020]'>
-                Progress Tracking
+                Current Stage: {currentStage.toLowerCase()}
               </span>
             </div>
-            <div className='ml-6'>
-              <p
-                className='text-[#4A4A4A] mb-2'
-                role='status'
-                aria-label='Last period date'
-              >
-                Last Period: {format(parseISO(lastPeriodDate), 'MMMM d, yyyy')}
-              </p>
-              <div
-                className='relative pt-1'
-                role='progressbar'
-                aria-valuenow={Math.round(progressPercentage)}
-                aria-valuemin={0}
-                aria-valuemax={100}
-                aria-label='Progress towards confirming menopause'
-              >
-                <div className='flex mb-2 items-center justify-between'>
-                  <div>
-                    <span className='text-xs font-semibold inline-block text-[#800020]'>
-                      {Math.round(progressPercentage)}% towards confirming
-                      menopause
-                    </span>
+            <p
+              className='text-[#4A4A4A] ml-6'
+              role='status'
+              aria-label='Stage description'
+            >
+              {getStageDescription(currentStage, monthsSinceLastPeriod)}
+            </p>
+          </div>
+
+          {lastPeriodDate && (
+            <div>
+              <div className='flex items-center gap-2 mb-2'>
+                <Clock className='w-4 h-4 text-[#B76E79]' aria-hidden='true' />
+                <span className='font-medium text-[#800020]'>
+                  Progress Tracking
+                </span>
+              </div>
+              <div className='ml-6'>
+                <p
+                  className='text-[#4A4A4A] mb-2'
+                  role='status'
+                  aria-label='Last period date'
+                >
+                  Last Period:{' '}
+                  {format(parseISO(lastPeriodDate), 'MMMM d, yyyy')}
+                </p>
+                <div
+                  className='relative pt-1'
+                  role='progressbar'
+                  aria-valuenow={Math.round(progressPercentage)}
+                  aria-valuemin={0}
+                  aria-valuemax={100}
+                  aria-label='Progress towards confirming menopause'
+                >
+                  <div className='flex mb-2 items-center justify-between'>
+                    <div>
+                      <span className='text-xs font-semibold inline-block text-[#800020]'>
+                        {Math.round(progressPercentage)}% towards confirming
+                        menopause
+                      </span>
+                    </div>
+                    <div className='text-right'>
+                      <span className='text-xs font-semibold inline-block text-[#800020]'>
+                        {monthsSinceLastPeriod} / 12 months
+                      </span>
+                    </div>
                   </div>
-                  <div className='text-right'>
-                    <span className='text-xs font-semibold inline-block text-[#800020]'>
-                      {monthsSinceLastPeriod} / 12 months
-                    </span>
+                  <div className='overflow-hidden h-2 text-xs flex rounded bg-[#E3BAB3]'>
+                    <div
+                      style={{ width: `${progressPercentage}%` }}
+                      className='shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-[#800020] transition-all duration-500'
+                    />
                   </div>
-                </div>
-                <div className='overflow-hidden h-2 text-xs flex rounded bg-[#E3BAB3]'>
-                  <div
-                    style={{ width: `${progressPercentage}%` }}
-                    className='shadow-none flex flex-col text-center whitespace-nowrap text-white justify-center bg-[#800020] transition-all duration-500'
-                  />
                 </div>
               </div>
             </div>
+          )}
+
+          <PeriodHistory
+            periodDates={[
+              ...periodDates,
+              ...(lastPeriodDate ? [lastPeriodDate] : []),
+            ]}
+          />
+
+          <div
+            className='border-t border-[#E3BAB3] pt-4'
+            role='complementary'
+            aria-label='Journey information'
+          >
+            <h3 className='text-sm font-medium text-[#800020] mb-2'>
+              Understanding Your Journey
+            </h3>
+            <ul className='text-sm text-[#4A4A4A] space-y-2'>
+              <li>
+                • Perimenopause: Period changes begin, varying cycle lengths
+              </li>
+              <li>• Menopause: Confirmed after 12 months without a period</li>
+              <li>• Post-menopause: New phase of life, focus on well-being</li>
+            </ul>
           </div>
-        )}
-
-        <PeriodHistory
-          periodDates={[
-            ...periodDates,
-            ...(lastPeriodDate ? [lastPeriodDate] : []),
-          ]}
-        />
-
-        <div
-          className='border-t border-[#E3BAB3] pt-4'
-          role='complementary'
-          aria-label='Journey information'
-        >
-          <h3 className='text-sm font-medium text-[#800020] mb-2'>
-            Understanding Your Journey
-          </h3>
-          <ul className='text-sm text-[#4A4A4A] space-y-2'>
-            <li>
-              • Perimenopause: Period changes begin, varying cycle lengths
-            </li>
-            <li>• Menopause: Confirmed after 12 months without a period</li>
-            <li>• Post-menopause: New phase of life, focus on well-being</li>
-          </ul>
         </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 }

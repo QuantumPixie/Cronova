@@ -9,6 +9,7 @@ import {
   ResponsiveContainer,
 } from 'recharts';
 import { subMonths, format, parseISO } from 'date-fns';
+import { ErrorBoundary } from '../error/ErrorBoundary';
 
 interface PeriodHistoryProps {
   periodDates: string[];
@@ -38,61 +39,63 @@ export function PeriodHistory({
   });
 
   return (
-    <div
-      className='bg-white rounded-lg p-4 border border-[#E3BAB3]'
-      role='region'
-      aria-label='Period History Chart'
-    >
-      <h3 className='text-[#800020] font-medium mb-4'>Period History</h3>
-      <div className='h-64' aria-hidden='true'>
-        <ResponsiveContainer width='100%' height='100%'>
-          <LineChart
-            data={monthlyData}
-            margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
-          >
-            <CartesianGrid strokeDasharray='3 3' />
-            <XAxis
-              dataKey='month'
-              tick={{ fontSize: 12 }}
-              interval={1}
-              aria-label='Months'
-            />
-            <YAxis
-              label={{
-                value: 'Days',
-                angle: -90,
-                position: 'insideLeft',
-                style: { textAnchor: 'middle' },
-              }}
-              aria-label='Days'
-            />
-            <Tooltip />
-            <Line
-              type='monotone'
-              dataKey='hasPeriod'
-              stroke='#B76E79'
-              name='Recorded Period'
-              strokeWidth={2}
-              dot={{ r: 4 }}
-            />
-            <Line
-              type='monotone'
-              dataKey='average'
-              stroke='#E3BAB3'
-              strokeDasharray='5 5'
-              name='Average Cycle'
-            />
-          </LineChart>
-        </ResponsiveContainer>
-      </div>
+    <ErrorBoundary>
       <div
-        className='mt-4 text-sm text-[#4A4A4A]'
-        role='complementary'
-        aria-label='Chart Legend'
+        className='bg-white rounded-lg p-4 border border-[#E3BAB3]'
+        role='region'
+        aria-label='Period History Chart'
       >
-        <p>• Solid line shows your recorded periods</p>
-        <p>• Dashed line shows average cycle length</p>
+        <h3 className='text-[#800020] font-medium mb-4'>Period History</h3>
+        <div className='h-64' aria-hidden='true'>
+          <ResponsiveContainer width='100%' height='100%'>
+            <LineChart
+              data={monthlyData}
+              margin={{ top: 5, right: 20, bottom: 5, left: 0 }}
+            >
+              <CartesianGrid strokeDasharray='3 3' />
+              <XAxis
+                dataKey='month'
+                tick={{ fontSize: 12 }}
+                interval={1}
+                aria-label='Months'
+              />
+              <YAxis
+                label={{
+                  value: 'Days',
+                  angle: -90,
+                  position: 'insideLeft',
+                  style: { textAnchor: 'middle' },
+                }}
+                aria-label='Days'
+              />
+              <Tooltip />
+              <Line
+                type='monotone'
+                dataKey='hasPeriod'
+                stroke='#B76E79'
+                name='Recorded Period'
+                strokeWidth={2}
+                dot={{ r: 4 }}
+              />
+              <Line
+                type='monotone'
+                dataKey='average'
+                stroke='#E3BAB3'
+                strokeDasharray='5 5'
+                name='Average Cycle'
+              />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+        <div
+          className='mt-4 text-sm text-[#4A4A4A]'
+          role='complementary'
+          aria-label='Chart Legend'
+        >
+          <p>• Solid line shows your recorded periods</p>
+          <p>• Dashed line shows average cycle length</p>
+        </div>
       </div>
-    </div>
+    </ErrorBoundary>
   );
 }
