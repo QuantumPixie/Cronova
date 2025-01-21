@@ -12,6 +12,11 @@ const config: Config = {
     '^@/(.*)$': '<rootDir>/src/$1',
   },
   testMatch: ['**/__tests__/**/*.test.ts?(x)'],
+  collectCoverage: true,
+  collectCoverageFrom: [
+    './src/components/**/*.{js,jsx,ts,tsx}',
+    './src/lib/**/*.{js,jsx,ts,tsx}',
+  ],
 };
 
 export default createJestConfig(config);
