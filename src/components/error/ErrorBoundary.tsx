@@ -32,8 +32,14 @@ export class ErrorBoundary extends React.Component<
   render() {
     if (this.state.hasError) {
       return (
-        <div className='min-h-screen bg-gradient-to-b from-[#F5F2F2] to-[#F7E8E8] flex items-center justify-center'>
-          <div className='text-center p-8 bg-white rounded-lg shadow-md border border-[#E3BAB3]'>
+        <div
+          className='min-h-screen bg-gradient-to-b from-[#F5F2F2] to-[#F7E8E8] flex items-center justify-center'
+          data-testid='error-boundary-root'
+        >
+          <div
+            className='text-center p-8 bg-white rounded-lg shadow-md border border-[#E3BAB3]'
+            data-testid='error-boundary-card'
+          >
             <Frown className='w-16 h-16 text-[#800020] mx-auto mb-4' />
             <h2 className='text-2xl font-bold text-[#800020] mb-4'>
               Something went wrong
