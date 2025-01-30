@@ -82,8 +82,9 @@ export default function SettingsPage() {
   }
 
   return (
-    <div className='p-6 max-w-4xl mx-auto' role='main'>
-      <div className='flex justify-between items-center mb-6' role='banner'>
+    <div className='p-6 max-w-[1400px] mx-auto' role='main'>
+      {/* Header */}
+      <div className='flex justify-between items-center mb-8' role='banner'>
         <h1 className='text-2xl font-bold text-[#800020]'>Profile Settings</h1>
         <Link
           href='/dashboard'
@@ -94,111 +95,102 @@ export default function SettingsPage() {
           Back to Dashboard
         </Link>
       </div>
-      <div
-        className='grid grid-cols-1 md:grid-cols-2 gap-6'
-        role='group'
-        aria-label='Profile settings and tracking'
-      >
-        <div className='space-y-6'>
-          <form
-            onSubmit={handleSubmit}
-            className='space-y-6'
-            aria-label='Profile settings form'
-          >
-            {error && (
-              <div
-                className='p-3 text-sm text-red-500 bg-red-100 rounded'
-                role='alert'
-                aria-live='polite'
-              >
-                {error}
-              </div>
-            )}
 
-            {success && (
-              <div
-                className='p-3 text-sm text-green-500 bg-green-100 rounded'
-                role='alert'
-                aria-live='polite'
-              >
-                {success}
-              </div>
-            )}
-
-            <div role='group' aria-labelledby='name-label'>
-              <label
-                id='name-label'
-                htmlFor='name'
-                className='block text-sm font-medium text-[#800020]'
-              >
-                Name
-              </label>
-              <input
-                id='name'
-                name='name'
-                type='text'
-                value={formData.name}
-                onChange={(event) =>
-                  setFormData((prev) => ({ ...prev, name: event.target.value }))
-                }
-                className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020]'
-                aria-describedby={error ? 'settings-error' : undefined}
-              />
-            </div>
-
-            <div role='group' aria-labelledby='stage-label'>
-              <label
-                id='stage-label'
-                htmlFor='menopauseStage'
-                className='block text-sm font-medium text-[#800020]'
-              >
-                Menopause Stage
-              </label>
-              <select
-                id='menopauseStage'
-                name='menopauseStage'
-                value={formData.menopauseStage}
-                onChange={(e) =>
-                  handleStageChange(e.target.value as MenopauseStage)
-                }
-                className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020]'
-                aria-describedby={error ? 'settings-error' : undefined}
-              >
-                {[
-                  MenopauseStage.PERIMENOPAUSE,
-                  MenopauseStage.MENOPAUSE,
-                  MenopauseStage.POSTMENOPAUSE,
-                ].map((stage) => (
-                  <option key={stage} value={stage}>
-                    {stage.charAt(0) + stage.slice(1).toLowerCase()}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <button
-              type='submit'
-              disabled={isLoading}
-              className='w-full rounded bg-[#800020] px-4 py-2 text-[#E3BAB3] hover:bg-[#a36c53] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200'
-              aria-disabled={isLoading}
+      <div className='grid grid-cols-1 lg:grid-cols-12 gap-6'>
+        {/* Left Column - Profile Settings */}
+        <div className='lg:col-span-4 space-y-6'>
+          <div className='bg-white rounded-lg shadow-sm border border-[#E3BAB3] p-6'>
+            <h2 className='text-lg font-semibold text-[#800020] mb-6'>
+              Profile Information
+            </h2>
+            <form
+              onSubmit={handleSubmit}
+              className='space-y-6'
+              aria-label='Profile settings form'
             >
-              {isLoading ? 'Saving...' : 'Save Settings'}
-            </button>
-          </form>
-        </div>
+              {error && (
+                <div
+                  className='p-3 text-sm text-red-500 bg-red-100 rounded'
+                  role='alert'
+                >
+                  {error}
+                </div>
+              )}
+              {success && (
+                <div
+                  className='p-3 text-sm text-green-500 bg-green-100 rounded'
+                  role='alert'
+                >
+                  {success}
+                </div>
+              )}
 
-        <div
-          className='space-y-6'
-          role='complementary'
-          aria-label='Tracking information'
-        >
-          <MenopauseJourney
-            lastPeriodDate={formData.lastPeriodDate}
-            currentStage={formData.menopauseStage}
-          />
+              <div>
+                <label
+                  htmlFor='name'
+                  className='block text-sm font-medium text-[#800020]'
+                >
+                  Name
+                </label>
+                <input
+                  id='name'
+                  name='name'
+                  type='text'
+                  value={formData.name}
+                  onChange={(e) =>
+                    setFormData((prev) => ({ ...prev, name: e.target.value }))
+                  }
+                  className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020]'
+                />
+              </div>
+
+              <div>
+                <label
+                  htmlFor='menopauseStage'
+                  className='block text-sm font-medium text-[#800020]'
+                >
+                  Menopause Stage
+                </label>
+                <select
+                  id='menopauseStage'
+                  name='menopauseStage'
+                  value={formData.menopauseStage}
+                  onChange={(e) =>
+                    handleStageChange(e.target.value as MenopauseStage)
+                  }
+                  className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020]'
+                >
+                  {Object.values(MenopauseStage).map((stage) => (
+                    <option key={stage} value={stage}>
+                      {stage.charAt(0) + stage.slice(1).toLowerCase()}
+                    </option>
+                  ))}
+                </select>
+              </div>
+
+              <button
+                type='submit'
+                disabled={isLoading}
+                className='w-full rounded bg-[#800020] px-4 py-2 text-[#E3BAB3] hover:bg-[#a36c53] disabled:opacity-50 transition-colors duration-200'
+              >
+                {isLoading ? 'Saving...' : 'Save Settings'}
+              </button>
+            </form>
+          </div>
+
+          {/* Period Tracker Component */}
           <PeriodTracker
             lastPeriodDate={formData.lastPeriodDate}
             onUpdatePeriod={handlePeriodUpdate}
+          />
+        </div>
+
+        {/* Right Column - Journey and History */}
+        <div className='lg:col-span-8 space-y-6'>
+          <MenopauseJourney
+            lastPeriodDate={formData.lastPeriodDate}
+            currentStage={formData.menopauseStage}
+            periodDates={formData.periodDates}
           />
         </div>
       </div>
