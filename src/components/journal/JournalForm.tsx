@@ -1,21 +1,13 @@
-'use client';
-
-import { useState } from 'react';
+import React, { useState } from 'react';
 import type { JournalFormData } from '@/types/journal';
 import { ErrorBoundary } from '../error/ErrorBoundary';
+import MoodSelector from './MoodSelector';
+import JournalSlider from './JournalSlider';
 
 interface JournalFormProps {
   onSubmit: (data: JournalFormData) => Promise<void>;
   initialData?: Partial<JournalFormData>;
 }
-
-const MOOD_OPTIONS = [
-  { value: 'GREAT', label: 'Great' },
-  { value: 'GOOD', label: 'Good' },
-  { value: 'NEUTRAL', label: 'Neutral' },
-  { value: 'LOW', label: 'Low' },
-  { value: 'BAD', label: 'Bad' },
-] as const;
 
 export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
   const [isLoading, setIsLoading] = useState(false);
@@ -24,7 +16,7 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
   const [formData, setFormData] = useState<JournalFormData>({
     date: initialData?.date ?? new Date().toISOString().split('T')[0],
     mood: initialData?.mood ?? 'NEUTRAL',
-    sleep: initialData?.sleep ?? 0,
+    sleep: initialData?.sleep ?? 8,
     exercise: initialData?.exercise ?? false,
     diet: initialData?.diet ?? [],
     stress: initialData?.stress ?? 0,
@@ -60,7 +52,6 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
           <div
             className='p-3 text-sm text-red-500 bg-red-100 rounded'
             role='alert'
-            aria-live='polite'
           >
             {error}
           </div>
@@ -87,106 +78,48 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
             }
             className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
             required
-            aria-required='true'
           />
         </div>
 
-        <div role='group' aria-labelledby='mood-label'>
-          <label
-            id='mood-label'
-            htmlFor='mood'
-            className='block text-sm font-medium text-[#800020]'
-          >
-            Mood
-          </label>
-          <select
-            id='mood'
-            value={formData.mood}
-            onChange={(event) =>
-              setFormData((prev) => ({
-                ...prev,
-                mood: event.target.value as typeof formData.mood,
-              }))
-            }
-            className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
-            required
-            aria-required='true'
-          >
-            {MOOD_OPTIONS.map(({ value, label }) => (
-              <option key={value} value={value}>
-                {label}
-              </option>
-            ))}
-          </select>
-        </div>
+        <MoodSelector
+          value={formData.mood}
+          onChange={(mood) => setFormData((prev) => ({ ...prev, mood }))}
+        />
 
-        <div role='group' aria-labelledby='sleep-label'>
-          <label
-            id='sleep-label'
-            htmlFor='sleep'
-            className='block text-sm font-medium text-[#800020]'
-          >
-            Hours of Sleep
-          </label>
+        <JournalSlider
+          label='Hours of Sleep'
+          value={formData.sleep}
+          onChange={(sleep) => setFormData((prev) => ({ ...prev, sleep }))}
+          min={0}
+          max={24}
+          unit='h'
+        />
+
+        <div className='flex items-center gap-2'>
           <input
-            type='number'
-            id='sleep'
-            min='0'
-            max='24'
-            value={formData.sleep}
+            type='checkbox'
+            id='exercise'
+            checked={formData.exercise}
             onChange={(event) =>
               setFormData((prev) => ({
                 ...prev,
-                sleep: Number(event.target.value),
+                exercise: event.target.checked,
               }))
             }
-            className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
-            required
-            aria-required='true'
+            className='rounded border-[#E3BAB3] text-[#800020] focus:ring-[#800020]'
           />
-        </div>
-
-        <div role='group'>
-          <label className='flex items-center'>
-            <input
-              type='checkbox'
-              checked={formData.exercise}
-              onChange={(event) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  exercise: event.target.checked,
-                }))
-              }
-              className='rounded border-[#E3BAB3] text-[#800020] focus:ring-[#800020]'
-              aria-label='Exercise today'
-            />
-            <span className='ml-2 text-sm text-[#4A4A4A]'>Exercise today?</span>
+          <label htmlFor='exercise' className='text-sm text-[#4A4A4A]'>
+            Exercise today?
           </label>
         </div>
 
-        <div role='group' aria-labelledby='stress-label'>
-          <label
-            id='stress-label'
-            htmlFor='stress'
-            className='block text-sm font-medium text-[#800020]'
-          >
-            Stress Level (0-10)
-          </label>
-          <input
-            type='number'
-            id='stress'
-            min='0'
-            max='10'
-            value={formData.stress}
-            onChange={(event) =>
-              setFormData((prev) => ({
-                ...prev,
-                stress: Number(event.target.value),
-              }))
-            }
-            className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
-          />
-        </div>
+        <JournalSlider
+          label='Stress Level'
+          value={formData.stress ?? 0}
+          onChange={(stress) => setFormData((prev) => ({ ...prev, stress }))}
+          min={0}
+          max={10}
+        />
 
         <div role='group' aria-labelledby='notes-label'>
           <label
@@ -208,7 +141,6 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
             }
             className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
             placeholder='Add any additional notes about your day...'
-            aria-label='Additional notes about your day'
           />
         </div>
 
@@ -216,7 +148,6 @@ export function JournalForm({ onSubmit, initialData }: JournalFormProps) {
           type='submit'
           disabled={isLoading}
           className='w-full rounded bg-[#800020] px-4 py-2 text-[#E3BAB3] hover:bg-[#a36c53] disabled:opacity-50 disabled:cursor-not-allowed transition-colors duration-200'
-          aria-disabled={isLoading}
         >
           {isLoading ? 'Saving...' : 'Save Journal Entry'}
         </button>

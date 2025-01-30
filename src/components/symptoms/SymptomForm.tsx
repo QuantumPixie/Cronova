@@ -1,8 +1,7 @@
-'use client';
-
-import { useState } from 'react';
+import React, { useState } from 'react';
 import type { SymptomFormData } from '@/types/symptoms';
 import { ErrorBoundary } from '../error/ErrorBoundary';
+import SymptomRatingSlider from './SymptomRatingSlider';
 
 interface SymptomFormProps {
   onSubmit: (data: SymptomFormData) => Promise<void>;
@@ -24,6 +23,8 @@ const INTENSITY_OPTIONS = [
   { value: 'SEVERE', label: 'Severe' },
 ] as const;
 
+type SymptomField = (typeof SYMPTOM_FIELDS)[number]['name'];
+
 export function SymptomForm({ onSubmit, initialData }: SymptomFormProps) {
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -39,6 +40,18 @@ export function SymptomForm({ onSubmit, initialData }: SymptomFormProps) {
     intensity: initialData?.intensity ?? 'MODERATE',
     notes: initialData?.notes ?? '',
   });
+
+  const handleSymptomChange = (event: {
+    target: { name: string; value: number };
+  }) => {
+    const { name, value } = event.target;
+    if (SYMPTOM_FIELDS.some((field) => field.name === name)) {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
+  };
 
   async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -85,12 +98,13 @@ export function SymptomForm({ onSubmit, initialData }: SymptomFormProps) {
           <input
             type='date'
             id='date'
+            name='date'
             max={today}
             value={formData.date}
-            onChange={(event) =>
+            onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
-                date: event.target.value,
+                date: e.target.value,
               }))
             }
             className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
@@ -100,31 +114,13 @@ export function SymptomForm({ onSubmit, initialData }: SymptomFormProps) {
         </div>
 
         {SYMPTOM_FIELDS.map(({ name, label }) => (
-          <div key={name} role='group' aria-labelledby={`${name}-label`}>
-            <label
-              id={`${name}-label`}
-              htmlFor={name}
-              className='block text-sm font-medium text-[#800020]'
-            >
-              {label} (0-10)
-            </label>
-            <input
-              type='number'
-              id={name}
-              min='0'
-              max='10'
-              value={formData[name as keyof typeof formData]}
-              onChange={(event) =>
-                setFormData((prev) => ({
-                  ...prev,
-                  [name]: Number(event.target.value),
-                }))
-              }
-              className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
-              required
-              aria-required='true'
-            />
-          </div>
+          <SymptomRatingSlider
+            key={name}
+            name={name}
+            label={label}
+            value={formData[name as SymptomField]}
+            onChange={handleSymptomChange}
+          />
         ))}
 
         <div role='group' aria-labelledby='intensity-label'>
@@ -137,11 +133,12 @@ export function SymptomForm({ onSubmit, initialData }: SymptomFormProps) {
           </label>
           <select
             id='intensity'
+            name='intensity'
             value={formData.intensity}
-            onChange={(event) =>
+            onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
-                intensity: event.target.value as 'MILD' | 'MODERATE' | 'SEVERE',
+                intensity: e.target.value as SymptomFormData['intensity'],
               }))
             }
             className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
@@ -166,12 +163,13 @@ export function SymptomForm({ onSubmit, initialData }: SymptomFormProps) {
           </label>
           <textarea
             id='notes'
+            name='notes'
             rows={3}
             value={formData.notes}
-            onChange={(event) =>
+            onChange={(e) =>
               setFormData((prev) => ({
                 ...prev,
-                notes: event.target.value,
+                notes: e.target.value,
               }))
             }
             className='mt-1 block w-full rounded border border-[#E3BAB3] p-2 focus:border-[#800020] focus:ring-[#800020] bg-white'
