@@ -9,7 +9,10 @@ export async function POST(request: Request) {
     const session = await getServerSession(authOptions);
 
     if (!session) {
-      return NextResponse.json({ success: false, error: 'Unauthorized' });
+      return NextResponse.json(
+        { success: false, error: 'Unauthorized' },
+        { status: 401 }
+      );
     }
 
     const formData: SymptomFormData = await request.json();
@@ -36,9 +39,9 @@ export async function POST(request: Request) {
     return NextResponse.json({ success: true, data: symptom });
   } catch (error) {
     console.error('Server error:', error);
-    return NextResponse.json({
-      success: false,
-      error: 'Failed to save symptom',
-    });
+    return NextResponse.json(
+      { success: false, error: 'Failed to save symptom' },
+      { status: 500 }
+    );
   }
 }
